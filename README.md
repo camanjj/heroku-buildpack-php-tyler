@@ -33,7 +33,7 @@ Edit `support/set-env.sh` and `bin/compile` to update the version numbers.
 $ gem install vulcan
 $ export AWS_ID="1BHAJK48DJFMQKZMNV93" # optional if s3 handled manually.
 $ export AWS_SECRET="fj2jjchebsjksmMJCN387RHNjdnddNfi4jjhshh3" # as above
-$ export S3_BUCKET="heroku-buildpack-php-tyler" # set to your S3 bucket.
+$ export S3_BUCKET="heroku-buildpack-php-ustramooner" # set to your S3 bucket.
 $ source support/set-env.sh
 ````
 Edit `bin/compile` and `support/ec2-build-php.sh` to reflect the correct S3 bucket.
@@ -74,9 +74,9 @@ To pre-compile PHP for Heroku, spin up an Amazon EC2 instance within the US-East
 The use the following to compile PHP:
 ````
 # after logging into EC2 instance, preferably with screen running.
-$ curl -L "https://github.com/iphoting/heroku-buildpack-php-tyler/raw/master/support/ec2-build-php.sh" -o - | sudo bash
+$ curl -L "https://github.com/ustramooner/heroku-buildpack-php-ustramooner/raw/master/support/ec2-build-php.sh" -o - | sudo bash
 ````
-You should review the build script at <https://github.com/iphoting/heroku-buildpack-php-tyler/blob/master/support/ec2-build-php.sh>.
+You should review the build script at <https://github.com/ustramooner/heroku-buildpack-php-tyler/blob/master/support/ec2-build-php.sh>.
 
 ### Bundling Caching
 To speed up the slug compilation stage, precompiled binary packages are cached. The buildpack will attempt to fetch `manifest.md5sum` to verify that the cached packages are still fresh.
@@ -110,12 +110,12 @@ Export your new relic license key as the `NEW_RELIC_LICENSE_KEY` env variable us
 ### Deploying
 To use this buildpack, on a new Heroku app:
 ````
-heroku create -s cedar -b git://github.com/iphoting/heroku-buildpack-php-tyler.git
+heroku create -s cedar -b git://github.com/ustramooner/heroku-buildpack-php-tyler.git
 ````
 
 On an existing app:
 ````
-heroku config:add BUILDPACK_URL=git://github.com/iphoting/heroku-buildpack-php-tyler.git
+heroku config:add BUILDPACK_URL=git://github.com/ustramooner/heroku-buildpack-php-tyler.git
 heroku config:add PATH="/app/vendor/bin:/app/local/bin:/app/vendor/nginx/sbin:/app/vendor/php/bin:/app/vendor/php/sbin:/usr/local/bin:/usr/bin:/bin"
 ````
 
