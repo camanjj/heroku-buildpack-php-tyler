@@ -2,7 +2,7 @@ Nginx+PHP-FPM build pack
 ========================
 
 This is a build pack bundling PHP and Nginx for Heroku apps.
-Includes additional extensions: apc, memcache, memcached, phpredis, mcrypt, and newrelic.
+Includes additional extensions: apc, memcache, memcached, phpredis, mcrypt, mysql, postgres, and newrelic.
 Dependency management is handled by Composer.
 
 Configuration

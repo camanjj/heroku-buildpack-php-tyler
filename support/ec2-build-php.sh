@@ -24,12 +24,14 @@ apt-get -y update
 echo "+ Installing build dependencies..."
 # install build deps
 apt-get -y install g++ \
+make \
 gcc \
 libssl-dev \
 libpng-dev \
 libjpeg-dev \
 libxml2-dev \
 libmysqlclient-dev \
+libpq-dev \
 libpq-dev \
 libpcre3-dev \
 php5-dev \
@@ -95,10 +97,12 @@ echo "+ Configuring PHP..."
 --with-iconv \
 --with-mhash \
 --with-mysql \
+--with-pgsql \
 --with-mysqli \
 --with-openssl \
 --with-pcre-regex \
 --with-pdo-mysql \
+--with-pdo-pgsql \
 --with-png-dir \
 --with-zlib \
 --without-pdo-sqlite \
