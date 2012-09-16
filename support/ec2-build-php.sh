@@ -1,9 +1,9 @@
 #!/bin/bash
 # use AMI ami-04c9306d
 # run this script as root on EC2 machine.
-
+set -x
 ## EDIT
-export S3_BUCKET="heroku-buildpack-php-tyler"
+export S3_BUCKET="heroku-buildpack-php-ustramooner"
 export LIBMCRYPT_VERSION="2.5.8"
 export PHP_VERSION="5.4.5"
 export APC_VERSION="3.1.10"
