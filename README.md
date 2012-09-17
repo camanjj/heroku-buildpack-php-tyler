@@ -74,7 +74,7 @@ To pre-compile PHP for Heroku, spin up an Amazon EC2 instance within the US-East
 The use the following to compile PHP:
 ````
 # after logging into EC2 instance, preferably with screen running.
-$ curl -L "https://github.com/ustramooner/heroku-buildpack-php-ustramooner/raw/master/support/ec2-build-php.sh" -o - | sudo bash
+$ curl -L "https://github.com/ustramooner/heroku-buildpack-php-tyler/raw/master/support/ec2-build-php.sh" -o - | sudo bash
 ````
 You should review the build script at <https://github.com/ustramooner/heroku-buildpack-php-tyler/blob/master/support/ec2-build-php.sh>.
 
