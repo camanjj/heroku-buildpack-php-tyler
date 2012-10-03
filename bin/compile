@@ -224,6 +224,11 @@ if [ -d /app/conf ]; then
 
 fi
 
+#set the env variables
+for var in \`env|cut -f1 -d=\`; do
+  echo "env[\$var]=\"\${!var}\"" >> /app/vendor/php/etc/php-fpm.conf;
+done
+
 # Set correct port variable.
 erb /app/vendor/nginx/conf/nginx.conf.erb > /app/vendor/nginx/conf/nginx.conf
 # Set NEWRELIC key
