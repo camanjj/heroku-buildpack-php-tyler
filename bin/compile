@@ -247,8 +247,6 @@ nginx &
 if [ "" != "\$PHP_WARMUP" ]; then
     echo "Warming up http://localhost:\$PORT/\$PHP_WARMUP"
     echo -n "GET \$PHP_WARMUP HTTP/1.0\r\n\r\n" | nc localhost \$PORT
-    echo -n "GET \$PHP_WARMUP HTTP/1.0\r\n\r\n" | nc localhost \$PORT
-    echo -n "GET \$PHP_WARMUP HTTP/1.0\r\n\r\n" | nc localhost \$PORT
 else
     echo "No PHP_WARMUP variable defined"
 fi
