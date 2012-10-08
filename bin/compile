@@ -244,7 +244,7 @@ newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
 php-fpm
 nginx
 
-if [ ! -z \$PHP_WARMUP ]; then
+if [ "" != "\$PHP_WARMUP" ]; then
     wget http://localhost:\$PORT/\$PHP_WARMUP
 fi
 EOF
