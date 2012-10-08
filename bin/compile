@@ -241,7 +241,7 @@ mkdir -p client_body_temp fastcgi_temp proxy_temp scgi_temp uwsgi_temp
 (tail --quiet -f -n 0 /app/vendor/nginx/logs/*.log /app/vendor/php/var/log/*.log /app/local/var/log/newrelic/*.log &)
 
 if [ "" != "\$WARMUP_COMMAND" ]; then
-    \$WARMUP_COMMAND
+    bash -c "\$WARMUP_COMMAND"
 fi
 
 newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
