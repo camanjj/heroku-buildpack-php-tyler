@@ -242,14 +242,19 @@ mkdir -p client_body_temp fastcgi_temp proxy_temp scgi_temp uwsgi_temp
 
 newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
 php-fpm
-nginx
+nginx &
 
 if [ "" != "\$PHP_WARMUP" ]; then
     echo "Warming up http://localhost:\$PORT/\$PHP_WARMUP"
-    wget "http://localhost:\$PORT/\$PHP_WARMUP"
+    echo -n "GET \$PHP_WARMUP HTTP/1.0\r\n\r\n" | nc localhost \$PORT
+    echo -n "GET \$PHP_WARMUP HTTP/1.0\r\n\r\n" | nc localhost \$PORT
+    echo -n "GET \$PHP_WARMUP HTTP/1.0\r\n\r\n" | nc localhost \$PORT
 else
     echo "No PHP_WARMUP variable defined"
 fi
+
+fg
+
 EOF
 chmod +x boot.sh
 
