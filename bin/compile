@@ -245,7 +245,7 @@ php-fpm
 nginx
 
 if [ ! -z \$PHP_WARMUP ];
-    wget http://localhost:\$PORT/$PHP_WARMUP
+    wget http://localhost:\$PORT/\$PHP_WARMUP
 fi
 EOF
 chmod +x boot.sh
