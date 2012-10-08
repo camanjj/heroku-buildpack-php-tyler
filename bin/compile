@@ -245,7 +245,10 @@ php-fpm
 nginx
 
 if [ "" != "\$PHP_WARMUP" ]; then
-    wget http://localhost:\$PORT/\$PHP_WARMUP
+    echo "Warming up http://localhost:\$PORT/\$PHP_WARMUP"
+    wget "http://localhost:\$PORT/\$PHP_WARMUP"
+else
+    echo "No PHP_WARMUP variable defined"
 fi
 EOF
 chmod +x boot.sh
