@@ -128,14 +128,14 @@ tar xzf ${MEMCACHED_FILE} -C ${BUILD_DIR}/local
 echo "-----> Installing PHP"
 if [ -f "$PHP_FILE" ]
 then
-	#check_md5 "${PHP_FILE}"
-	#if [ ! $? ]
-	#then
+	check_md5 "${PHP_FILE}"
+	if [ ! $? ]
+	then
 		echo "Bundling PHP v${PHP_VERSION}" | indent
 		curl --silent --max-time 60 -O --location $PHP_URL
-	#else
-	#	echo "Using cached PHP v${PHP_VERSION}" | indent
-	#fi
+	else
+		echo "Using cached PHP v${PHP_VERSION}" | indent
+	fi
 else
 	echo "Bundling PHP v${PHP_VERSION}" | indent
 	curl --silent --max-time 60 -O --location $PHP_URL
