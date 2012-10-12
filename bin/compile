@@ -226,7 +226,7 @@ fi
 
 #set the env variables
 if [ ! -f /app/vendor/php/etc/php-fpm.conf.envd ]; then
-    for var in \`env|cut -f1 -d=\`; do
+    for var in \`env|cut -f1 -d=| grep -v '^_$'|grep -v PATH|grep -v COLOR\`; do
       echo "env[\$var]=\"\${!var}\"" >> /app/vendor/php/etc/php-fpm.conf;
     done
     touch /app/vendor/php/etc/php-fpm.conf.envd
