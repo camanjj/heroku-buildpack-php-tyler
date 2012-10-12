@@ -202,6 +202,7 @@ cat >boot.sh <<EOF
 #!/usr/bin/env bash
 
 echo "Booting nginx"
+set -x
 
 # Override config files if provided in app.
 if [ -d /app/conf ]; then
