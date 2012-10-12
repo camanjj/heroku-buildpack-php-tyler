@@ -198,7 +198,7 @@ cp $LP_DIR/conf/nginx.conf.erb ${BUILD_DIR}/vendor/nginx/conf/nginx.conf.erb
 
 echo "-----> Installing boot script"
 cd $BUILD_DIR
-cat >>boot.sh <<EOF
+cat >boot.sh <<EOF
 #!/usr/bin/env bash
 
 echo "Booting nginx"
@@ -225,9 +225,12 @@ if [ -d /app/conf ]; then
 fi
 
 #set the env variables
-for var in \`env|cut -f1 -d=\`; do
-  echo "env[\$var]=\"\${!var}\"" >> /app/vendor/php/etc/php-fpm.conf;
-done
+if [ ! -f /app/vendor/php/etc/php-fpm.conf.envd ]; then
+    for var in \`env|cut -f1 -d=\`; do
+      echo "env[\$var]=\"\${!var}\"" >> /app/vendor/php/etc/php-fpm.conf;
+    done
+    touch /app/vendor/php/etc/php-fpm.conf.envd
+fi
 
 # Set correct port variable.
 erb /app/vendor/nginx/conf/nginx.conf.erb > /app/vendor/nginx/conf/nginx.conf
@@ -244,7 +247,9 @@ if [ "" != "\$WARMUP_COMMAND" ]; then
     bash -c "\$WARMUP_COMMAND"
 fi
 
-newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
+if [ "" != "\$license_key" ]; then
+    newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
+fi
 php-fpm
 nginx
 
