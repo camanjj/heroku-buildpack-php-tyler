@@ -202,7 +202,6 @@ cat >boot.sh <<EOF
 #!/usr/bin/env bash
 
 echo "Booting nginx"
-set -x
 
 # Override config files if provided in app.
 if [ -d /app/conf ]; then
@@ -227,8 +226,9 @@ fi
 
 #set the env variables
 if [ ! -f /app/vendor/php/etc/php-fpm.conf.envd ]; then
-    export
     env | cut -f1 -d=| grep -v '^_\$'|grep -v PATH|grep -v COLOR| grep -v PS1 |grep -v PORT | while read var; do
+      echo \$var
+      echo \${!var}
       echo "env[\$var]=\"\${!var}\"" >> /app/vendor/php/etc/php-fpm.conf;
     done
     touch /app/vendor/php/etc/php-fpm.conf.envd
