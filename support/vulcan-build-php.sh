@@ -1,59 +1,14 @@
 #!/bin/bash
-# use AMI ami-04c9306d
-# run this script as root on EC2 machine.
+# vulcan build -v -c "./vulcan-build-php.sh" -p /app/vendor/php -o php-${PHP_VERSION}-with-fpm-heroku.tar.gz
+
 ## EDIT
-export S3_BUCKET="heroku-buildpack-php-ustramooner"
-export LIBMCRYPT_VERSION="2.5.8"
-export PHP_VERSION="5.4.5"
-export APC_VERSION="3.1.10"
-export PHPREDIS_VERSION="2.2.1"
-export LIBMEMCACHED_VERSION="1.0.7"
-export MEMCACHED_VERSION="2.0.1"
-export NEWRELIC_VERSION="2.9.5.78"
+source ./set-env.sh
 ## END EDIT
 
 set -e
 set -o pipefail
 
 orig_dir=$( pwd )
-
-echo "+ Using S3 update sources..."
-sed -i 's/us-east-1.ec2.archive.ubuntu.com\//us-east-1.ec2.archive.ubuntu.com.s3.amazonaws.com\//g' /etc/apt/sources.list
-
-echo "+ Updating apt-get sources..."
-apt-get -y update
-
-echo "+ Installing build dependencies..."
-# install build deps
-apt-get -y install g++ \
-make \
-gcc \
-libssl-dev \
-libpng-dev \
-libjpeg-dev \
-libxml2-dev \
-libmysqlclient-dev \
-libpq-dev \
-libpq-dev \
-libpcre3-dev \
-php5-dev \
-php-pear \
-curl \
-libcurl3 \
-libcurl3-dev \
-php5-curl \
-libsasl2-dev \
-libbz2-dev \
-ccache \
-git-core
-#libmcrypt-dev \
-
-# update path to use ccache
-export PATH=/usr/lib/ccache:$PATH
-
-# retrieve ccache
-echo "+ Fetching compiler cache..."
-curl -f -L "https://s3.amazonaws.com/${S3_BUCKET}/ccache.tar.bz2" -o - | tar xj
 
 mkdir -p build && pushd build
 
@@ -133,9 +88,15 @@ popd
 
 echo "+ Installing memcache..."
 # install memcache
+
+set +e
+set +o pipefail
 yes '' | pecl install memcache-beta
 # answer questions
 # "You should add "extension=memcache.so" to php.ini"
+set -e
+set -o pipefail
+
 
 echo "+ Installing memcached from source..."
 # install apc from source
@@ -170,15 +131,8 @@ popd
 echo "+ Packaging PHP..."
 # package PHP
 echo ${PHP_VERSION} > /app/vendor/php/VERSION
-pushd /app/vendor/php
-tar czf $orig_dir/php-${PHP_VERSION}-with-fpm-heroku.tar.gz *
-popd
 
 popd
 
-echo "+ Binaries are packaged in $orig_dir/*.tar.gz. Upload to s3 bucket of your choice."
-
-tar cjf ccache.tar.bz2 .ccache/
-
-echo "+ Compiler cache packaged in $orig_dir/ccache.tar.bz2. Upload to s3 bucket of your choice."
 echo "+ Done!"
+

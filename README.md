@@ -36,7 +36,7 @@ $ export AWS_SECRET="fj2jjchebsjksmMJCN387RHNjdnddNfi4jjhshh3" # as above
 $ export S3_BUCKET="heroku-buildpack-php-ustramooner" # set to your S3 bucket.
 $ source support/set-env.sh
 ````
-Edit `bin/compile` and `support/ec2-build-php.sh` to reflect the correct S3 bucket.
+Edit `bin/compile` and `support/set-env.sh` to reflect the correct S3 bucket.
 
 ### Nginx
 Run:
@@ -67,16 +67,15 @@ $ support/package_newrelic
 The binary package will be produced in the current directory. Upload it to Amazon S3.
 
 ### PHP
-PHP with mcrypt requires libmcrypt to be installed. Vulcan cannot be used to build in this case.
+PHP requires supporting libraries to be avaliable when being built. Please have the preceeding packages built and uploaded onto S3 before continuing.
 
-To pre-compile PHP for Heroku, spin up an Amazon EC2 instance within the US-East Region: `ami-04c9306d`. Refer to `support/ec2-up.sh` for some hints.
+Review the `support/vulcan-build-php.sh` build script and verify the version numbers in `support/set-env.sh`.
 
-The use the following to compile PHP:
+Run:
 ````
-# after logging into EC2 instance, preferably with screen running.
-$ curl -L "https://github.com/ustramooner/heroku-buildpack-php-tyler/raw/master/support/ec2-build-php.sh" -o - | sudo bash
+$ support/package_php
 ````
-You should review the build script at <https://github.com/ustramooner/heroku-buildpack-php-tyler/blob/master/support/ec2-build-php.sh>.
+The binary package will be produced in the current directory. Upload it to Amazon S3.
 
 ### Bundling Caching
 To speed up the slug compilation stage, precompiled binary packages are cached. The buildpack will attempt to fetch `manifest.md5sum` to verify that the cached packages are still fresh.
@@ -100,7 +99,7 @@ Remember to upload an updated `manifest.md5sum` to Amazon S3 whenever you upload
 
 Usage
 -----
-To make your changes, fork this repo first and replace the following URLs with yours.
+Read through this whole README file first and decide if you need to make any changes to this buildpack; most customisations do not require editing the buildpack scripts. However, if you do need to make changes, fork this repo and replace the following URLs with yours.
 
 ### Enabling New Relic
 Copy `support/04_newrelic.ini.sample` to your heroku app as `conf/etc.d/04_newrelic.ini`, and edit as necessary.
@@ -125,7 +124,7 @@ Push deploy your app and you should see Nginx, mcrypt, and PHP being bundled.
 [Composer][] is the de fecto dependency manager for PHP, similar to Bundler in Ruby.
 
 - Declare your dependencies in `composer.json`; see [docs][cdocs] for syntax and other details.
-- Run `php composer.phar install` *locally* at least once to generate a `composer.lock` file. Make sure this file is also committed into version control.
+- Run `php composer.phar install` *locally* at least once to generate a `composer.lock` file. Make sure both `composer.json` and `composer.lock` files are committed into version control.
 - When you push the app, the buildpack will fetch and install dependencies when it detects both `composer.json` and `composer.lock` files.
 
 Note: It is optional to have `composer.phar` within the application root. If missing, the buildpack will automatically fetch the latest version available from <http://getcomposer.org/composer.phar>.
@@ -151,12 +150,12 @@ $ git push -f heroku <branch>:master  # where <branch> is the git branch you wan
 
 Finally, run those tests:
 ```
-$ heroku run tests
+$ heroku run tests-with-caching
 ```
 
 If you run your tests programatically, you might need the follow command instead:
 ```
-$ heroku run tests | bin/report
+$ heroku run tests-with-caching | bin/report
 ```
 
 Source: <https://github.com/ryanbrainard/heroku-buildpack-testrunner>
@@ -164,7 +163,9 @@ Source: <https://github.com/ryanbrainard/heroku-buildpack-testrunner>
 Credits
 -------
 
-Updated for Nginx+PHP support with memcache, phpredis, and mcrypt support by Ronald Ip from <https://github.com/heroku/heroku-buildpack-php>.
+Original buildpack adapted and modified for Nginx+PHP support by [Ronald Ip][iht]. Buildpack originally inspired, and forked from <https://github.com/heroku/heroku-buildpack-php>.
 
 Credits to original authors.
+
+[iht]: http://ronaldip.com/
 

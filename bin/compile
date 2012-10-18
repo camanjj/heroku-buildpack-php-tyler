@@ -219,21 +219,21 @@ if [ -d /app/conf ]; then
 
 fi
 
-#set the env variables
-if [ ! -f /app/vendor/php/etc/php-fpm.conf.envd ]; then
-    env | cut -f1 -d=| grep -v '^_\$'|grep -v PATH|grep -v COLOR| grep -v PS1 |grep -v PORT | while read var; do
-      echo \$var
-      echo \${!var}
-      echo "env[\$var]=\"\${!var}\"" >> /app/vendor/php/etc/php-fpm.conf;
-    done
-    touch /app/vendor/php/etc/php-fpm.conf.envd
-fi
+
 
 # Set correct port variable.
 erb /app/vendor/nginx/conf/nginx.conf.erb > /app/vendor/nginx/conf/nginx.conf
 # Set NEWRELIC key
 if [ -x "/app/local/bin/newrelic-license" ]; then
 	/app/local/bin/newrelic-license
+fi
+
+#set the env variables
+if [ ! -f /app/vendor/php/etc/php-fpm.conf.envd ]; then
+    env | cut -f1 -d=| grep -v '^_\$'|grep -v PATH|grep -v COLOR| grep -v PS1 |grep -v PORT | while read var; do
+      echo "env[\$var]=\"\${!var}\"" >> /app/vendor/php/etc/php-fpm.conf;
+    done
+    touch /app/vendor/php/etc/php-fpm.conf.envd
 fi
 
 touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log /app/vendor/php/var/log/php-fpm.log /app/local/var/log/newrelic/newrelic-daemon.log /app/local/var/log/newrelic/php_agent.log
