@@ -244,7 +244,7 @@ if [ "" != "\$WARMUP_COMMAND" ]; then
     bash -c "\$WARMUP_COMMAND"
 fi
 
-if [ "" != "\$license_key" ]; then
+if [ "" != "\$NEW_RELIC_LICENSE_KEY" ]; then
     newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
 else
     echo "Disabling newrelic, no NEW_RELIC_LICENSE_KEY set"
