@@ -236,7 +236,7 @@ if [ ! -f /app/vendor/php/etc/php-fpm.conf.envd ]; then
     touch /app/vendor/php/etc/php-fpm.conf.envd
 fi
 
-touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log /app/vendor/php/var/log/php-fpm.log /app/local/var/log/newrelic/newrelic-daemon.log /app/local/var/log/newrelic/php_agent.log
+touch /app/vendor/nginx/logs/access.log /app/vendor/nginx/logs/error.log /app/vendor/php/var/log/php-errors.log /app/local/var/log/newrelic/newrelic-daemon.log /app/local/var/log/newrelic/php_agent.log
 mkdir -p client_body_temp fastcgi_temp proxy_temp scgi_temp uwsgi_temp
 (tail --quiet -f -n 0 /app/vendor/nginx/logs/*.log /app/vendor/php/var/log/*.log /app/local/var/log/newrelic/*.log &)
 
@@ -246,6 +246,9 @@ fi
 
 if [ "" != "\$license_key" ]; then
     newrelic-daemon -c /app/local/etc/newrelic.cfg -d error
+else
+    echo "Disabling newrelic, no NEW_RELIC_LICENSE_KEY set"
+    rm /app/vendor/php/etc.d/*newrelic.ini
 fi
 php-fpm
 nginx
