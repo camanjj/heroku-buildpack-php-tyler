@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+set -x
+if [ "$LIFREETYPE_VERSION" == "" ]; then
+  echo "must set LIFREETYPE_VERSION, i.e LIFREETYPE_VERSION=2.4.12"
+  exit 1
+fi
+
+basedir="$( cd -P "$( dirname "$0" )" && pwd )"
+
+# make a temp directory
+tempdir="$( mktemp -t libfreetype_XXXX )"
+rm -rf $tempdir
+mkdir -p $tempdir
+pushd $tempdir
+
+# download and extract libfreetype
+curl -L "http://download.savannah.gnu.org/releases/freetype/freetype-$LIFREETYPE_VERSION.tar.bz2" -o - | tar xj
+
+# build and package libfreetype for heroku
+vulcan build -v -s freetype-$LIFREETYPE_VERSION -o $tempdir/freetype-$LIFREETYPE_VERSION.tar.gz -p /app/local -c './configure --prefix=/app/local --disable-rpath && make install' 
+
+popd
+
+cp $tempdir/freetype-$LIFREETYPE_VERSION.tar.gz .
+
+echo "+ Binaries available at ./libfreetype-$LIFREETYPE_VERSION.tar.gz"
+echo "+ Upload this package to Amazon S3."
+
+# upload to s3
+#s3cmd put -rr $tempdir/*.tar.gz s3://$S3_BUCKET

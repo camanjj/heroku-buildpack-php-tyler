@@ -2,7 +2,7 @@ Nginx+PHP-FPM build pack
 ========================
 
 This is a build pack bundling PHP and Nginx for Heroku apps.
-Includes additional extensions: apc, memcache, memcached, phpredis, mcrypt, mysql, postgres, and newrelic.
+Includes additional extensions: apc, memcache, memcached, phpredis, mcrypt, mysql, postgres, gd with freetype and newrelic.
 Dependency management is handled by Composer.
 
 Configuration
@@ -23,6 +23,12 @@ Create a `conf/` directory in the root of the your deployment. Any files with na
 
 This way, you can customise settings specific to your application, especially the document root in `nginx.conf.erb`. (Note the .erb extension.)
 
+Alternatively, the bundled `nginx.conf.erb` will automatically include all nginx configuration snippets within the application directory: `conf/nginx.d/*.conf`. This is another way that you can modify the `root` and `index` directives. Further, if the config snippets end with `.erb`, they will be parsed and have `.conf` extension appended to its filename. 
+
+### Running App-specific Scripts
+Heroku now supports running a single `.profile` script in the root of your application during startup, right before `boot.sh` is executed. See <https://devcenter.heroku.com/articles/dynos#startup>.
+
+For more advanced usage of .profile scripts, see <https://devcenter.heroku.com/articles/profiled>.
 
 Pre-compiling binaries
 ----------------------
@@ -31,6 +37,7 @@ Pre-compiling binaries
 Edit `support/set-env.sh` and `bin/compile` to update the version numbers.
 ````
 $ gem install vulcan
+$ vulcan create build-server-name
 $ export AWS_ID="1BHAJK48DJFMQKZMNV93" # optional if s3 handled manually.
 $ export AWS_SECRET="fj2jjchebsjksmMJCN387RHNjdnddNfi4jjhshh3" # as above
 $ export S3_BUCKET="heroku-buildpack-php-ustramooner" # set to your S3 bucket.
@@ -67,7 +74,7 @@ $ support/package_newrelic
 The binary package will be produced in the current directory. Upload it to Amazon S3.
 
 ### PHP
-PHP requires supporting libraries to be avaliable when being built. Please have the preceeding packages built and uploaded onto S3 before continuing.
+PHP requires supporting libraries to be available when being built. Please have the preceding packages built and uploaded onto S3 before continuing.
 
 Review the `support/vulcan-build-php.sh` build script and verify the version numbers in `support/set-env.sh`.
 
@@ -121,7 +128,7 @@ heroku config:add PATH="/app/vendor/bin:/app/local/bin:/app/vendor/nginx/sbin:/a
 Push deploy your app and you should see Nginx, mcrypt, and PHP being bundled.
 
 ### Declaring Dependencies using Composer
-[Composer][] is the de fecto dependency manager for PHP, similar to Bundler in Ruby.
+[Composer][] is the de facto dependency manager for PHP, similar to Bundler in Ruby.
 
 - Declare your dependencies in `composer.json`; see [docs][cdocs] for syntax and other details.
 - Run `php composer.phar install` *locally* at least once to generate a `composer.lock` file. Make sure both `composer.json` and `composer.lock` files are committed into version control.

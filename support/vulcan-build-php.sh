@@ -10,6 +10,7 @@ set -o pipefail
 
 orig_dir=$( pwd )
 
+mkdir -p /app/vendor/php
 mkdir -p build && pushd build
 
 echo "+ Fetching libmcrypt libraries..."

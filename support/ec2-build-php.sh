@@ -34,7 +34,6 @@ libjpeg-dev \
 libxml2-dev \
 libmysqlclient-dev \
 libpq-dev \
-libpq-dev \
 libpcre3-dev \
 php5-dev \
 php-pear \
