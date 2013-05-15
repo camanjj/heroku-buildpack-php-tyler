@@ -1,6 +1,6 @@
 #!/bin/bash
 # vulcan build -v -c "./vulcan-build-php.sh" -p /app/vendor/php -o php-${PHP_VERSION}-with-fpm-heroku.tar.gz
-
+set -x
 ## EDIT
 source ./set-env.sh
 ## END EDIT
@@ -21,6 +21,10 @@ curl -L "https://s3.amazonaws.com/${S3_BUCKET}/libmcrypt-${LIBMCRYPT_VERSION}.ta
 echo "+ Fetching libmemcached libraries..."
 mkdir -p /app/local
 curl -L "https://s3.amazonaws.com/${S3_BUCKET}/libmemcached-${LIBMEMCACHED_VERSION}.tar.gz" -o - | tar xz -C /app/local
+
+echo "+ Fetching freetype libraries..."
+mkdir -p /app/local
+curl -L "https://s3.amazonaws.com/${S3_BUCKET}/freetype-${LIFREETYPE_VERSION}.tar.gz" -o - | tar xz -C /app/local
 
 echo "+ Fetching PHP sources..."
 #fetch php, extract
@@ -62,6 +66,7 @@ echo "+ Configuring PHP..."
 --with-pgsql \
 --with-pdo-pgsql \
 --with-png-dir \
+--with-freetype-dir=/app/local \
 --with-zlib
 
 echo "+ Compiling PHP..."
@@ -107,7 +112,7 @@ pushd memcached-${MEMCACHED_VERSION}
 sed -i -e '21 s/no, no/yes, yes/' ./config.m4
 sed -i -e '18 s/no, no/yes, yes/' ./config.m4
 phpize
-./configure --with-libmemcached-dir=/app/local --with-php-config=/app/vendor/php/bin/php-config
+./configure --with-libmemcached-dir=/app/local --with-php-config=/app/vendor/php/bin/php-config --enable-memcached-sasl
 make && make install
 popd
 
