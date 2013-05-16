@@ -1,6 +1,7 @@
 #!/bin/bash
 # use AMI ami-04c9306d
 # run this script as root on EC2 machine.
+
 ## EDIT
 export S3_BUCKET="heroku-buildpack-php-ustramooner"
 export LIBMCRYPT_VERSION="2.5.8"
@@ -26,7 +27,6 @@ apt-get -y update
 echo "+ Installing build dependencies..."
 # install build deps
 apt-get -y install g++ \
-make \
 gcc \
 libssl-dev \
 libpng-dev \
