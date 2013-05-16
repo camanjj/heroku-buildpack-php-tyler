@@ -1,6 +1,6 @@
 #!/bin/bash
 # vulcan build -v -c "./vulcan-build-php.sh" -p /app/vendor/php -o php-${PHP_VERSION}-with-fpm-heroku.tar.gz
-set -x
+
 ## EDIT
 source ./set-env.sh
 ## END EDIT
