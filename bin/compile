@@ -111,7 +111,7 @@ mkdir -p ${BUILD_DIR}/vendor/optipng
 download_url ${OPTIPNG_URL}
 tar xzf ${OPTIPNG_FILE} -C ${BUILD_DIR}/vendor/optipng
 # mv ${BUILD_DIR}/vendor/optipng/optipng-0.7.4 ${BUILD_DIR}/vendor/optipng
-
+#
 mkdir -p ${BUILD_DIR}/cache
 chmod -v 755 ${BUILD_DIR}/cache
 
