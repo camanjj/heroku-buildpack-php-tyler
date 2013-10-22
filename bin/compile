@@ -109,7 +109,7 @@ tar xzf ${NGINX_FILE} -C ${BUILD_DIR}/vendor/nginx
 echo "DOING Stuff for optiPNG"
 mkdir -p ${BUILD_DIR}/vendor/optipng
 curl -s -S -O -L -m 300 --connect-timeout 60 ${OPTIPNG_URL}
-tar xzf ${OPTIPNG_FILE} -C ${BUILD_DIR}/vendor/
+tar xzf ${OPTIPNG_FILE} -C ${BUILD_DIR}/vendor/optipng
 
 
 
