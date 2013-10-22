@@ -32,6 +32,10 @@ NEWRELIC_URL="${S3_URL}/${NEWRELIC_FILE}"
 COMPOSER_URL="http://getcomposer.org/composer.phar"
 #
 
+#MY CUSTOM ADD_ON
+OPTIPNG_URL="http://softlayer-dal.dl.sourceforge.net/project/optipng/OptiPNG/optipng-0.7.4/optipng-0.7.4.tar.gz"
+
+
 function indent() {
   c='s/^/       /'
   case $(uname) in
@@ -99,6 +103,13 @@ fi
 
 mkdir -p ${BUILD_DIR}/vendor/nginx
 tar xzf ${NGINX_FILE} -C ${BUILD_DIR}/vendor/nginx
+
+################MY OWN IMPLEMENTATION###################
+echo "DOING Stuff for optiPNG"
+mkdir -p ${BUILD_DIR}/vendor/optipng
+curl $OPTIPNG_URL -o - | tar -xz -C $1/$OPTIPNG_URL -f -
+
+
 
 # libmcrypt
 echo "-----> Installing libmcrypt"
