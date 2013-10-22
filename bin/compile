@@ -34,6 +34,7 @@ COMPOSER_URL="http://getcomposer.org/composer.phar"
 
 #MY CUSTOM ADD_ON
 OPTIPNG_URL="http://softlayer-dal.dl.sourceforge.net/project/optipng/OptiPNG/optipng-0.7.4/optipng-0.7.4.tar.gz"
+OPTIPNG_FILE="optipng-0.7.4.tar.gz"
 
 
 function indent() {
@@ -107,8 +108,8 @@ tar xzf ${NGINX_FILE} -C ${BUILD_DIR}/vendor/nginx
 ################MY OWN IMPLEMENTATION###################
 echo "DOING Stuff for optiPNG"
 mkdir -p ${BUILD_DIR}/vendor/optipng
-download_url ${OPTIPNG_URL}
-tar -xz -C ${BUILD_DIR}/vendor/$AWESOME_VM_VENDOR -f -
+curl -s -S -O -L -m 300 --connect-timeout 60 ${OPTIPNG_URL}
+tar xzf ${OPTIPNG_FILE} -C ${BUILD_DIR}/vendor/
 
 
 
