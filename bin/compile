@@ -34,7 +34,7 @@ COMPOSER_URL="http://getcomposer.org/composer.phar"
 
 #MY CUSTOM ADD_ON
 OPTIPNG_URL="https://s3.amazonaws.com/timthumb-buildpack-bucket/optipng-0.7.tgz"
-OPTIPNG_FILE="optipng-0.7.4.tgz"
+OPTIPNG_FILE="optipng-0.7.tgz"
 
 
 function indent() {
